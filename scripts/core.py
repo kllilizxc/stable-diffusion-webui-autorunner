@@ -1,14 +1,10 @@
 from modules.txt2img import txt2img
-from modules.scripts import scripts_txt2img
-import modules
-import modules.scripts
 from modules import sd_samplers
 from modules.generation_parameters_copypaste import create_override_settings_dict
 from modules.processing import StableDiffusionProcessing, Processed, StableDiffusionProcessingTxt2Img, \
     StableDiffusionProcessingImg2Img, process_images
 from modules.shared import opts, cmd_opts
 import modules.shared as shared
-import modules.processing as processing
 from modules.ui import plaintext_to_html
 
 
@@ -93,9 +89,6 @@ def txt2img(id_task: str, prompt: str, negative_prompt: str, prompt_styles, step
     # p.scripts = modules.scripts.scripts_txt2img
     # p.script_args = args
 
-    if cmd_opts.enable_console_prompts:
-        print(f"\ntxt2img: {prompt}", file=shared.progress_print_out)
-
     processed = process_images(p)
 
     p.close()
@@ -103,10 +96,5 @@ def txt2img(id_task: str, prompt: str, negative_prompt: str, prompt_styles, step
     shared.total_tqdm.clear()
 
     generation_info_js = processed.js()
-    if opts.samples_log_stdout:
-        print(generation_info_js)
-
-    if opts.do_not_show_images:
-        processed.images = []
 
     return processed.images, generation_info_js, plaintext_to_html(processed.info), plaintext_to_html(processed.comments)
